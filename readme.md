@@ -17,9 +17,43 @@
 val a: String = "value" // non-null type
 ```
 
+- When do you get a null expection?
+- When you have an object, which didn't get initialized or filled with null. Any you try to call a mehtod ojn this object which won't work, because a non existing value can't call a method.
+
+- Kotlin is basically designed, that you can't use/assign null values.
+- var a: String = "Hello World!" // Non-null type
+- var a = null // Compiler error. NUll has to be explicitly assigned
+
+- Kotlin offers the option, to assign the value null, but it has to be done specifically.
+- var b: String? = "Hello World!"
+- var b = null // This works, because var b is of the type "nullable"
+
+- Nullable Types:
+- These are the types, which can hold "null" as a value.
+- To assign a variable with this value, you have to add an "?" to its type (see question before)
+- NUllable Typed need somem sort of special handling in order to prevent null pointer exceptions
+
+- Non-null Types:
+- These are types, which can't hold "null" as a value.
+- you can't simply assign "null" as its value. It has to be a "non-null" value.
+- You also can't assign "null" as a value later on, if it has been assigned with a "non-null" value beforehand.
+
 ### What are lambda expressions and higher order functions in Kotlin? Why would you store a function inside a variable? (0,5 points)
 
 <span style="color:blue">Provide your answer here!</span>
+
+- Lambda Expressions:
+- Lambda expressions are so-called "function literals".
+- Function literals are functions, that do not get delcared, but instead passed on as an expresion immediately.
+- With lambda expressions, you can create variables that store functions, call these variables like functions, and store them in other variables that you can call like functions.
+
+- Higher Order Functions:
+- This type of function is function, that can take functions as parameters, or returns a function.
+
+- Storing Functions:
+- Functions are also data types and can therefore be store in variables.
+- By storing afunction inside of a variable you have the ability to change the behaviour of a piece of your app at runtime.
+- You can nest composbale functions to build layouts.
 
 ### Provide a solution for the following number guessing game inside `App.kt`. (3 points)
 
