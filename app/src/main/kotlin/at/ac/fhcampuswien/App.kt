@@ -7,6 +7,31 @@ class App {
     // Game logic for a number guessing game
     fun playNumberGame(digitsToGuess: Int = 4) {
         //TODO: build a menu which calls the functions and works with the return values
+
+        // Generate a random, with non repeating numbers
+        val generatedNumber = generateRandomNonRepeatingNumber(digitsToGuess)
+        println("Debug: Generated number is $generatedNumber") // For debugging purposes. Can be removed for actual game purpose.
+
+        var guess: Int
+        do {
+            // Ask user to enter a 4 digit number
+            println("Guess the $digitsToGuess-digit number: ")
+            val userInput = readLine() ?: ""
+
+            // Converting user-input into an Int
+            guess = userInput.toIntOrNull() ?: 0
+
+            // Compare user-input with generated 4 number digit
+            val result = checkUserInputAgainstGeneratedNumber(guess, generatedNumber)
+
+            // Print the result in ":" ratio
+            println(result)
+
+            // Keep the loop going, until the number has been guessed correctly
+        } while (result.n != digitsToGuess)
+
+        // Congrats message to user
+        println("Congratulations! You've guessed the correct number: $generatedNumber")
     }
 
     /**
@@ -25,7 +50,15 @@ class App {
      */
     val generateRandomNonRepeatingNumber: (Int) -> Int = { length ->
         //TODO implement the function
-        0   // return value is a placeholder
+
+        // Ensure, that the length of numbers is between 1-9
+        if (length < 1 || length > 9) throw IllegalArgumentException("Length must be between 1 and 9.")
+
+        // Create numbers between 1-9. Shuffle them and then take the first length and "convert" them into a String
+        val digits = (1..9).shuffled().take(length).joinToString("")
+
+        // Convert the String back into an Int
+        digits.toInt()
     }
 
     /**
@@ -44,14 +77,61 @@ class App {
      *         The result is formatted as "Output: m:n", where "m" and "n" represent the above values, respectively.
      * @throws IllegalArgumentException if the inputs do not have the same number of digits.
      */
-    val checkUserInputAgainstGeneratedNumber: (Int, Int) -> CompareResult = { input, generatedNumber ->
-        //TODO implement the function
-        CompareResult(0, 0)   // return value is a placeholder
-    }
+
+    val checkUserInputAgainstGeneratedNumber: (Int, Int) -> CompareResult =
+        { input, generatedNumber ->
+            //TODO implement the function
+
+            val inputString = input.toString()
+            val generatedString = generatedNumber.toString()
+
+            // Ensure both inputs are of the same length; otherwise, throw an exception
+            if (inputString.length != generatedString.length) {
+                throw IllegalArgumentException("Input and generated number must have the same number of digits.")
+            }
+
+            var correctPositions = 0 // Count of digits in the correct position
+            var correctDigits = 0 // Count of correct digits regardless of their position
+
+            // Check each digit in the input to see if it matches the corresponding digit in the generated number (correct position)
+            for (i in inputString.indices) {
+                if (inputString[i] == generatedString[i]) {
+                    correctPositions++
+                }
+            }
+
+            // For counting correct digits (regardless of position), convert strings to character lists and sort them to compare
+            val sortedInputDigits = inputString.toCharArray().sorted()
+            val sortedGeneratedDigits = generatedString.toCharArray().sorted()
+
+            // Compare sorted lists to count matching digits (correct digits regardless of position)
+            var i = 0
+            var j = 0
+            while (i < sortedInputDigits.size && j < sortedGeneratedDigits.size) {
+                when {
+                    sortedInputDigits[i] == sortedGeneratedDigits[j] -> {
+                        correctDigits++
+                        i++
+                        j++
+                    }
+
+                    sortedInputDigits[i] < sortedGeneratedDigits[j] -> i++
+                    else -> j++
+                }
+            }
+
+            // Return the result with the count of correct digits and correct positions
+            CompareResult(correctDigits, correctPositions)
+        }
 }
 
 fun main() {
-    println("Hello World!")
+    // println("Hello World!")
     // TODO: call the App.playNumberGame function with and without default arguments
-    playNumberGame()
+
+    // Create instance of App class
+    val app = App()
+    // Start the game by calling the function
+    app.playNumberGame()
 }
+
