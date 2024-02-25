@@ -53,4 +53,5 @@ class App {
 fun main() {
     println("Hello World!")
     // TODO: call the App.playNumberGame function with and without default arguments
+    playNumberGame()
 }
